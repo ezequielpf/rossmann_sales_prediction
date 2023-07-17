@@ -5,6 +5,13 @@ import pandas as pd
 import numpy as np
 import math
 
+import sklearn.linear_model as lm
+import sklearn.metrics as mt
+from sklearn.preprocessing import RobustScaler, MinMaxScaler
+from sklearn.preprocessing import LabelEncoder
+from sklearn.ensemble import RandomForestRegressor
+import xgboost as xgb
+
 class Rossmann(object):
 
     def __init__(self):
@@ -164,26 +171,10 @@ class Rossmann(object):
         df5['week_of_year_sin'] = df5['week_of_year'].apply(lambda x: np.sin(x * (2 * np.pi / 52)))
         df5['week_of_year_cos'] = df5['week_of_year'].apply(lambda x: np.cos(x * (2 * np.pi / 52)))
 
-        cols_selected = ['store',
-                            'promo',
-                            'store_type',
-                            'assortment',
-                            'competition_distance',
-                            'competition_open_since_month',
-                            'competition_open_since_year',
-                            'promo2',
-                            'promo2_since_week',
-                            'promo2_since_year',
-                            'competition_time_month',
-                            'promo_time_week',
-                            'day_of_week_sin',
-                            'day_of_week_cos',
-                            'month_sin',
-                            'month_cos',
-                            'day_sin',
-                            'day_cos',
-                            'week_of_year_sin',
-                            'week_of_year_cos']
+        cols_selected = ['store', 'promo', 'store_type', 'assortment', 'competition_distance', 'competition_open_since_month',
+                        'competition_open_since_year', 'promo2', 'promo2_since_week', 'promo2_since_year', 'competition_time_month',
+                        'promo_time_week', 'day_of_week_sin', 'day_of_week_cos', 'month_sin', 'month_cos', 'day_sin',
+                        'day_cos', 'week_of_year_sin', 'week_of_year_cos']
         
         return df5[cols_selected]
     
@@ -194,6 +185,6 @@ class Rossmann(object):
         pred = model.predict(test_data)
 
         # join pred into the original data
-        original_data['prediction'] = np.expml(pred)
+        original_data['prediction'] = np.expm1(pred)
 
         return original_data.to_json(orient='records', date_format='iso')
