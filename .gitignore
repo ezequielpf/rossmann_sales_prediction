@@ -3,8 +3,8 @@ include/
 lib/
 lib64/
 share/
-app.web/
-rossmann-telegram-api/
-storytelling/
+#app.web/
+#rossmann-telegram-api/
+#storytelling/
 
 pyvenv.cfg
