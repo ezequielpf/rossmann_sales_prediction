@@ -1,40 +1,43 @@
-# Previsão de vendas das lojas Rossmann
+# Rossmann Sales Prediction
 
-## Contexto
+## Situation
+Rossmann, a large pharmacy chain in Europe, needed to forecast store sales for the next six weeks to support budgeting and renovation decisions. Existing forecasts were manual, based on managers' intuition, and lacked accuracy and centralization, making strategic planning difficult.
 
-A Rossmann é uma rede de farmácias presente em vários países da Europa. Durante uma reunião com os gerentes, o CFO pediu uma previsão de vendas para as seis semanas seguintas de cada uma das lojas.
+## Task
+Build a predictive model to estimate daily sales for each Rossmann store using historical data and store attributes, and compare different forecasting approaches (time series models and tree-based models).
 
-### Problema de negócio:
-- A rede Rossmann pretende fazer reformas em todas as suas lojas e, para isto, precisa determinar qual será o orçamento disponível em função da previsão de vendas dos próximos seis meses.
+## Action
+- Merged sales data (train.csv) with store attributes (store.csv) to enrich the dataset.
+- Created temporal and categorical features to capture sales patterns.
+- Extensive EDA to identify seasonality, weekday effects and promo/competition signals.
+- Feature engineering: temporal features, categorical encodings, competition/promo-derived features, and per-store lags & rolling statistics (7/14/28-day lags and moving averages).
+- Implemented tree-based models (XGBoost), using cross-validation, feature selection, and hyperparameter tuning.
+- Compared model performance with simple benchmarks (moving average, naive forecast).
+- Evaluated results using metrics such as RMSPE, RMSE, and MAPE, both globally and per store.
 
-### Dificuldade:
-- As predições atuais apresentam muita divergência pois se baseiam no conhecimento empírico dos gerentes. O método é pouco técnico.
-- Todas as previsões são feitas manualmente, ou seja, não utilizam ferramentas padronizadas para facilitar uma entrega síncrona de resultados.
-- A visualização dos resultados não fica centralizada, dificultando a tomada de decisões por parte do CFO.
+## Result
+- The global XGBoost model, using enriched data, outperformed time series models and simple benchmarks.
+- The XGBoost model achieved a lower RMSPE (0.1424) than Naive Forecast (0.3018) and Moving Average (0.4004) methods, showing significant accuracy gains.
+- The gain is 64.42% over the Moving Average and 52.79% over the Naive Forecast.
 
-### Solução:
-- Implementar um modelo de Machine Learning para realizar a previsão de vendas de uma forma mais técnica/científica.
-- Disponibilizar um sistema capaz de fornecer a previsão de vendas de qualquer loja através de um smartphone.
+### Financial Impact (Hypothetical Example)
 
+To illustrate the potential business gains of a more accurate model, consider the following scenario (hypothetical values, in euros):  
 
-## Premissas
+- **Number of stores:** 1,000  
+- **Average daily sales per store:** €3,000  
+- **Forecast horizon:** 42 days (6 weeks)  
+- **Total revenue in the period:** €126,000,000  
 
-1. Dados públicos foram utilizados para o estudo. Disponíveis em https://www.kaggle.com/competitions/rossmann-store-sales/data
+#### Error Comparison (RMSPE)
 
+| Model            | RMSPE (%) | Estimated Monetary Error (€) |
+|------------------|-----------|-------------------------------|
+| Moving Average   | 40.04%    | €50,450,400                   |
+| Naive Forecast   | 30.18%    | €38,026,800                   |
+| **XGBoost**      | **14.24%**| **€17,942,400**               |
 
-## Estratégia de solução
+#### XGBoost Gain
 
-1. Coleta dos dados
-2. Descrição dos dados em termos de volume e tipo
-3. Tratamento dos dados faltantes
-4. Formulação das hipóteses que descrevem o fenômeno
-5. Criação/derivação de novas características (features) independentes que podem descrever o fenômeno
-6. Definição de quais características são as mais relevantes e quais podem ser desconsideradas
-7. Comparação entre alguns algorítmos de Machine Learning
-8. Ajustar os hiperparâmetros
-
-
-## Resultado
-
-- Utilizando o algorítmo XGBoost houve um ganho, aproximado, de 40% em performance quando comparado com um modelo de regressão linear.
-- Desenvolvimento um bot no Telegram que envia uma requisição ao modelo hospedado em uma cloud e retorna a previsão de vendas de qualquer loja cadastrada para os próximos seis meses. Acesse https://youtube.com/shorts/2abtTxgfy5I para um exemplo de uso.
+- **vs Moving Average:** €32,508,000 error reduction  
+- **vs Naive Forecast:** €20,084,400 error reduction  
